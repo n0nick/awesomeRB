@@ -1,4 +1,3 @@
-
 public class Tester {
 
 	/**
@@ -10,16 +9,15 @@ public class Tester {
 		tree.insert(12);
 		tree.insert(13);
 		tree.insert(2);
-		
 
 		System.out.println(tree);
-		
+
 		/*
-		tree.leftRotate(tree.getRoot().getRightChild());
-		System.out.println(tree);
-		tree.rightRotate(tree.getRoot().getRightChild());
-		System.out.println(tree);
-		*/
+		 * tree.leftRotate(tree.getRoot().getRightChild());
+		 * System.out.println(tree);
+		 * tree.rightRotate(tree.getRoot().getRightChild());
+		 * System.out.println(tree);
+		 */
 
 	}
 
