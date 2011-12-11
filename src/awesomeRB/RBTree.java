@@ -61,11 +61,12 @@ public class RBTree {
 	 * precondition:  none
 	 * postcondition: contains(i) == true (that is, i is in the list)
 	 */
+	//TODO should we update a 'size' property on INS/DEL ?
 	public void insert(int i) {
 
 		RBNode newNode = new RBNode(i);
 
-		if (root == null) {
+		if (empty()) {
 			setRoot(newNode);
 		} else {
 			this.redBlackInsert(newNode);
@@ -93,11 +94,33 @@ public class RBTree {
 					leftRotate(newNode);
 				}
 
-				newNode.getParent().setBlack();
-				newNode.getGrandParent().setRed();
-				rightRotate(newNode.getGrandParent());
+				if (newNode.hasParent()) {
+					newNode.getParent().setBlack();
+					if (newNode.hasGrandParent()) {
+						newNode.getGrandParent().setRed();
+						rightRotate(newNode.getGrandParent());
+					}
+				}
 			} else {
+				y = newNode.getGrandParent().getRightChild();
 
+				if (!y.isBlack()) {
+					newNode.getParent().setBlack();
+					y.setBlack();
+					newNode.getGrandParent().setRed();
+					newNode = newNode.getGrandParent();
+				} else if (newNode == newNode.getParent().getLeftChild()) {
+					newNode = newNode.getParent();
+					rightRotate(newNode);
+				}
+
+				if (newNode.hasParent()) {
+					newNode.getParent().setBlack();
+					if (newNode.hasGrandParent()) {
+						newNode.getGrandParent().setRed();
+						leftRotate(newNode.getGrandParent());
+					}
+				}
 			}
 
 		}
@@ -227,13 +250,13 @@ public class RBTree {
 		RBNode y = x.getRightChild();
 		x.setRightChild(y.getLeftChild());
 
-		if (y.getLeftChild() != null) {
+		if (y.hasLeftChild()) {
 			y.getLeftChild().setParent(x);
 		}
 
 		y.setParent(x.getParent());
 
-		if (x.getParent() == null) {
+		if (!x.hasParent()) {
 			this.setRoot(y);
 		} else if (x == x.getParent().getLeftChild()) {
 			x.getParent().setLeftChild(y);
@@ -254,13 +277,13 @@ public class RBTree {
 		RBNode y = x.getLeftChild();
 		x.setLeftChild(y.getRightChild());
 
-		if (y.getRightChild() != null) {
+		if (y.hasRightChild()) {
 			y.getRightChild().setParent(x);
 		}
 
 		y.setParent(x.getParent());
 
-		if (x.getParent() == null) {
+		if (!x.hasParent()) {
 			this.setRoot(y);
 		} else if (x == x.getParent().getRightChild()) {
 			x.getParent().setRightChild(y);
@@ -300,9 +323,17 @@ public class RBTree {
 		public RBNode getParent() {
 			return this.parent;
 		}
+		
+		public boolean hasParent() {
+			return parent != null;
+		}
 
 		public RBNode getGrandParent() {
 			return getParent().getParent();
+		}
+		
+		public boolean hasGrandParent() {
+			return hasParent() && getParent().hasParent();
 		}
 
 		public void setParent(RBNode parent) {
