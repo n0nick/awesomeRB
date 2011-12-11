@@ -376,7 +376,6 @@ public class RBTree {
 			return false;
 		}
 
-		// TODO: ask about keys being unique
 		public void insert(RBNode newNode) {
 			if (newNode.getKey() < this.getKey()) {
 				if (this.hasLeftChild()) {
