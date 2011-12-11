@@ -1,3 +1,5 @@
+package awesomeRB;
+
 /**
  * 
  * RBTree
@@ -221,7 +223,7 @@ public class RBTree {
 	 * postcondition: rotates x to the left
 	 * @param x
 	 */
-	private void leftRotate(RBNode x) {
+	public void leftRotate(RBNode x) {
 		RBNode y = x.getRightChild();
 		x.setRightChild(y.getLeftChild());
 
@@ -248,7 +250,7 @@ public class RBTree {
 	 * postcondition: rotates x to the right
 	 * @param x
 	 */
-	private void rightRotate(RBNode x) {
+	public void rightRotate(RBNode x) {
 		RBNode y = x.getLeftChild();
 		x.setLeftChild(y.getRightChild());
 
