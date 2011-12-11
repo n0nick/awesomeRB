@@ -9,6 +9,7 @@
 
 public class RBTree {
 	
+	// TODO: change to private
 	private RBNode root;
 
   /**
@@ -54,7 +55,7 @@ public class RBTree {
 		   root = new RBNode(i);
 	   }
 	   else {
-		   
+		   root.insert(i);
 	   }
    }
   
@@ -171,6 +172,11 @@ public class RBTree {
    {
 	   return 42; // to be replaced by student code
    }
+   
+   public String toString()
+   {
+	   return root.toString();
+   }
 
   /**
    * public class RBNode
@@ -252,8 +258,35 @@ public class RBTree {
 		return false;
 	}
 	
+	// TODO: ask about keys being unique
 	public void insert(int i) {
-		
+		if(i < this.getKey()) {
+			if(this.hasLeftChild()) {
+				this.getLeftChild().insert(i);
+			}
+			else {
+				this.setLeftChild(new RBNode(i));
+			}
+		}
+		else if(i > this.getKey()) {
+			if(this.hasRightChild()) {
+				this.getRightChild().insert(i);
+			}
+			else {
+				this.setRightChild(new RBNode(i));
+			}
+		}
+	}
+	
+	// TODO: remove this
+	public String toString() {
+		String st;
+		st = "[ "+getKey()+" ";
+		st+= hasLeftChild() ? getLeftChild().toString() : "x";
+		st+= " ";
+		st+= hasRightChild() ? getRightChild().toString() : "x";
+		st+= " ]";
+		return st;
 	}
 	
   }
