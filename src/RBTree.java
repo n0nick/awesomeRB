@@ -209,7 +209,11 @@ public class RBTree {
 
 	//TODO document
 	public String toString() {
-		return root.toString();
+		if (!empty()) {
+			return String.format("<Tree %s>", root.toString());
+		} else {
+			return "<Tree empty>";
+		}
 	}
 
 	/**
@@ -394,13 +398,10 @@ public class RBTree {
 
 		// TODO: remove this
 		public String toString() {
-			String st;
-			st = "[ " + getKey() + " [";
-			st += hasLeftChild() ? getLeftChild().toString() : "x";
-			st += "] [";
-			st += hasRightChild() ? getRightChild().toString() : "x";
-			st += " ]]";
-			return st;
+			String leftString  = hasLeftChild() ? getLeftChild().toString() : "x";
+			String rightString = hasRightChild() ? getRightChild().toString() : "x";
+			
+			return String.format("[ %d %s %s ]", getKey(), leftString, rightString);
 		}
 
 	}
