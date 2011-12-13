@@ -1,5 +1,6 @@
 package awesomeRB;
 
+
 /**
  * 
  * RBTree
@@ -10,7 +11,7 @@ package awesomeRB;
  */
 
 public class RBTree {
-
+	
 	//TODO document
 	private RBNode root;
 
@@ -82,6 +83,7 @@ public class RBTree {
 		newNode.setRed();
 
 		while ((newNode != root) && (!newNode.getParent().isBlack())) {
+			//TODO bug when grandParent does not have leftChild
 			if (newNode.getParent() == newNode.getGrandParent().getLeftChild()) {
 				y = newNode.getGrandParent().getLeftChild();
 
@@ -150,7 +152,11 @@ public class RBTree {
 	 * postcondition: none
 	 */
 	public int min() {
-		return 42; // to be replaced by student code
+		if (empty()) {
+			return -1;
+		} else {
+			return (getRoot().min());
+		}
 	}
 
 	/**
@@ -163,7 +169,11 @@ public class RBTree {
 	 * postcondition: none
 	 */
 	public int max() {
-		return 42; // to be replaced by student code
+		if (empty()) {
+			return -1;
+		} else {
+			return (getRoot().max());
+		}
 	}
 
 	/**
@@ -177,8 +187,9 @@ public class RBTree {
 	 *                 ascending order.
 	 */
 	public int[] toIntArray() {
-		int[] arr = new int[42]; //
-		return arr; // to be replaced by student code
+		int[] arr = new int[this.size()];
+		this.getRoot().fillIntArray(arr, 0);
+		return arr;
 	}
 
 	/**
@@ -205,7 +216,11 @@ public class RBTree {
 	 * postcondition: none
 	 */
 	public int maxDepth() {
-		return 42; // to be replaced by student code
+		if (empty()) {
+			return 0;
+		} else {
+			return (this.getRoot().maxDepth());
+		}
 	}
 
 	/**
@@ -218,7 +233,11 @@ public class RBTree {
 	 * postcondition: none
 	 */
 	public int minLeafDepth() {
-		return 42; // to be replaced by student code
+		if (empty()) {
+			return 0;
+		} else {
+			return (this.getRoot().minLeafDepth());
+		}
 	}
 
 	/**
@@ -230,7 +249,11 @@ public class RBTree {
 	 * postcondition: none
 	 */
 	public int size() {
-		return 42; // to be replaced by student code
+		if (empty()) {
+			return 0;
+		} else {
+			return (this.getRoot().size());
+		}
 	}
 
 	//TODO document
@@ -415,27 +438,99 @@ public class RBTree {
 		}
 
 		public void insert(RBNode newNode) {
-			if (newNode.getKey() < this.getKey()) {
-				if (this.hasLeftChild()) {
-					this.getLeftChild().insert(newNode);
+			if (newNode.getKey() < getKey()) {
+				if (hasLeftChild()) {
+					getLeftChild().insert(newNode);
 				} else {
-					this.setLeftChild(newNode);
+					setLeftChild(newNode);
 				}
-			} else if (newNode.getKey() > this.getKey()) {
-				if (this.hasRightChild()) {
-					this.getRightChild().insert(newNode);
+			} else if (newNode.getKey() > getKey()) {
+				if (hasRightChild()) {
+					getRightChild().insert(newNode);
 				} else {
-					this.setRightChild(newNode);
+					setRightChild(newNode);
 				}
 			}
 		}
+		
+		public int min() {
+			if (hasLeftChild()) {
+				return getLeftChild().min();
+			} else {
+				return getKey();
+			}
+		}
+		
+		public int max() {
+			if (hasRightChild()) {
+				return getRightChild().max();
+			} else {
+				return getKey();
+			}
+		}
+		
+		public int size() {
+			int size = 1;
+			
+			if (hasLeftChild()) {
+				size+= getLeftChild().size();
+			}
+			if (hasRightChild()) {
+				size+= getRightChild().size();
+			}
+			
+			return size;
+		}
+		
+		public int fillIntArray(int[] arr, int loc) {
+			if (hasLeftChild()) {
+				loc = getLeftChild().fillIntArray(arr, loc);
+			}
+			
+			arr[loc++] = getKey();
+			
+			if (hasRightChild()) {
+				loc = getRightChild().fillIntArray(arr, loc);
+			}
+			
+			return loc;
+		}
 
-		// TODO: remove this
 		public String toString() {
 			String leftString  = hasLeftChild() ? getLeftChild().toString() : "x";
 			String rightString = hasRightChild() ? getRightChild().toString() : "x";
 			
 			return String.format("[ %d %s %s ]", getKey(), leftString, rightString);
+		}
+		
+		public int maxDepth() {
+			int downMax = 0;
+			
+			if (hasLeftChild() && hasRightChild()) {
+				downMax+= Math.max(getLeftChild().maxDepth(), 
+								getRightChild().maxDepth());
+			} else if (hasLeftChild()) {
+				downMax+= getLeftChild().maxDepth();
+			} else if (hasRightChild()) {
+				downMax+= getRightChild().maxDepth();
+			}
+
+			return 1 + downMax;
+		}
+		
+		public int minLeafDepth() {
+			int downMin = 0;
+			
+			if (hasLeftChild() && hasRightChild()) {
+				downMin+= Math.min(getLeftChild().maxDepth(), 
+									getRightChild().maxDepth());
+			} else if (hasLeftChild()) {
+				downMin+= getLeftChild().maxDepth();
+			} else if (hasRightChild()) {
+				downMin+=  getRightChild().maxDepth();
+			}
+			
+			return 1 + downMin;
 		}
 
 	}
