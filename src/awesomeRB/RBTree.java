@@ -29,7 +29,8 @@ public class RBTree {
 	 * 
 	 * returns true if and only if the tree is empty
 	 * 
-	 * preconditions: none postcondition: return true iff the data structure
+	 * preconditions: none
+	 * postcondition: return true iff the data structure
 	 * does not contain any item
 	 */
 	public boolean empty() {
@@ -235,7 +236,7 @@ public class RBTree {
 	//TODO document
 	public String toString() {
 		if (!empty()) {
-			return String.format("<Tree %s>", root.toString());
+			return String.format("<Tree %s>", root);
 		} else {
 			return "<Tree empty>";
 		}
