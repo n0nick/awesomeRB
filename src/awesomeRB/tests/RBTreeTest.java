@@ -132,6 +132,12 @@ public class RBTreeTest {
 	}
 	
 	@Test public void sizeTest1() {
+		RBTree tree = new RBTree();
+		tree.insert(1);
+		assertEquals(1, tree.size());
+	}
+	
+	@Test public void sizeTest2() {
 		RBTree tree = createSomeTestTree1();
 		assertEquals(4, tree.size());
 	}
