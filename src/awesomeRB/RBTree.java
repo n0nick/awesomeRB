@@ -83,8 +83,9 @@ public class RBTree {
 		newNode.setRed();
 
 		while ((newNode != root) && (!newNode.getParent().isBlack())) {
-			//TODO bug when grandParent does not have leftChild
-			if (newNode.getParent() == newNode.getGrandParent().getLeftChild()) {
+			//TODO bug when getParent() == root
+			if (newNode.getGrandParent().hasLeftChild() && 
+					newNode.getParent() == newNode.getGrandParent().getLeftChild()) {
 				y = newNode.getGrandParent().getLeftChild();
 
 				if (!y.isBlack()) {
