@@ -82,13 +82,13 @@ public class RBTree {
 		root.insert(newNode);
 		newNode.setRed();
 
-		while ((newNode != root) && (!newNode.getParent().isBlack())) {
+		while (newNode != root && newNode.getParent().isRed()) {
 			//TODO bug when getParent() == root
 			if (newNode.getGrandParent().hasLeftChild() && 
 					newNode.getParent() == newNode.getGrandParent().getLeftChild()) {
 				y = newNode.getGrandParent().getLeftChild();
 
-				if (!y.isBlack()) {
+				if (y.isRed()) {
 					newNode.getParent().setBlack();
 					y.setBlack();
 					newNode.getGrandParent().setRed();
@@ -108,7 +108,7 @@ public class RBTree {
 			} else {
 				y = newNode.getGrandParent().getRightChild();
 
-				if (!y.isBlack()) {
+				if (y.isRed()) {
 					newNode.getParent().setBlack();
 					y.setBlack();
 					newNode.getGrandParent().setRed();
