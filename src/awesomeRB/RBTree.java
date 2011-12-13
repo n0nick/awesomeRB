@@ -1,26 +1,34 @@
 package awesomeRB;
-
-
 /**
  * 
  * RBTree
  * 
  * An implementation of a Red Black Tree with
- * non-negative, distinct integer values
+ * non-negative, distinct integer values.
  * 
+ * All quoted algorithms are from:
+ * Cormen, Thomas H., Charles E. Leiserson, and
+ * Robert L. Rivest. Introduction to Algorithms.
+ * Cambridge, MA: MIT, 2001. Print.
  */
 
 public class RBTree {
 	
-	//TODO document
+	/**
+	 * Pointer to root node
+	 */
 	private RBNode root;
 
-	//TODO document
+	/**
+	 * Returns pointer to root node
+	 */
 	public RBNode getRoot() {
 		return this.root;
 	}
 
-	//TODO document
+	/**
+	 * Sets root node
+	 */
 	public void setRoot(RBNode root) {
 		this.root = root;
 	}
@@ -63,7 +71,6 @@ public class RBTree {
 	 * precondition:  none
 	 * postcondition: contains(i) == true (that is, i is in the list)
 	 */
-	//TODO should we update a 'size' property on INS/DEL ?
 	public void insert(int i) {
 
 		RBNode newNode = new RBNode(i);
@@ -71,11 +78,14 @@ public class RBTree {
 		if (empty()) {
 			setRoot(newNode);
 		} else {
-			this.redBlackInsert(newNode);
+			redBlackInsert(newNode);
 		}
 	}
 
-	//TODO document
+	/**
+	 * Inserts a node to a Red-Black tree in a valid way.
+	 * Based on the RB-Insert algorithm.
+	 */
 	public void redBlackInsert(RBNode newNode) {
 		RBNode y;
 
@@ -160,7 +170,7 @@ public class RBTree {
 		if (empty()) {
 			return -1;
 		} else {
-			return (getRoot().min());
+			return getRoot().min();
 		}
 	}
 
@@ -177,7 +187,7 @@ public class RBTree {
 		if (empty()) {
 			return -1;
 		} else {
-			return (getRoot().max());
+			return getRoot().max();
 		}
 	}
 
@@ -192,8 +202,8 @@ public class RBTree {
 	 *                 ascending order.
 	 */
 	public int[] toIntArray() {
-		int[] arr = new int[this.size()];
-		this.getRoot().fillIntArray(arr, 0);
+		int[] arr = new int[size()];
+		getRoot().fillIntArray(arr, 0);
 		return arr;
 	}
 
@@ -222,9 +232,9 @@ public class RBTree {
 	 */
 	public int maxDepth() {
 		if (empty()) {
-			return 0;
+			return -1;
 		} else {
-			return (this.getRoot().maxDepth());
+			return getRoot().maxDepth();
 		}
 	}
 
@@ -239,9 +249,9 @@ public class RBTree {
 	 */
 	public int minLeafDepth() {
 		if (empty()) {
-			return 0;
+			return -1; //TODO should be -1
 		} else {
-			return (this.getRoot().minLeafDepth());
+			return getRoot().minLeafDepth();
 		}
 	}
 
@@ -257,7 +267,7 @@ public class RBTree {
 		if (empty()) {
 			return 0;
 		} else {
-			return (this.getRoot().size());
+			return getRoot().size();
 		}
 	}
 
@@ -286,7 +296,7 @@ public class RBTree {
 		y.setParent(x.getParent());
 
 		if (!x.hasParent()) {
-			this.setRoot(y);
+			setRoot(y);
 		} else if (x == x.getParent().getLeftChild()) {
 			x.getParent().setLeftChild(y);
 		} else {
@@ -313,7 +323,7 @@ public class RBTree {
 		y.setParent(x.getParent());
 
 		if (!x.hasParent()) {
-			this.setRoot(y);
+			setRoot(y);
 		} else if (x == x.getParent().getRightChild()) {
 			x.getParent().setRightChild(y);
 		} else {
