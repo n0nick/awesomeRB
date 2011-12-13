@@ -110,7 +110,7 @@ public class RBTreeTest {
 	
 	@Test public void maxTest1() {
 		RBTree tree = createSomeTestTree1();
-		assertEquals(13, tree.min());
+		assertEquals(13, tree.max());
 	}
 	
 	@Test public void toIntArrayTest1() {
