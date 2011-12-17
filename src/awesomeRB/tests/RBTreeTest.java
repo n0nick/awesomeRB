@@ -76,6 +76,17 @@ public class RBTreeTest {
 		assertEquals(false, tree.empty());
 	}
 	
+	@Test public void insertTest4() {
+		RBTree tree = new RBTree();
+		
+		tree.insert(1);
+		tree.insert(3);
+		tree.insert(13);
+		tree.insert(15);
+		tree.insert(24);
+		tree.insert(15);
+	}
+	
 	@Test public void rotateLeftTest1() {
 		RBTree tree = createSomeTestTree1();
 		tree.leftRotate(tree.getRoot());
