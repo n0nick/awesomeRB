@@ -63,12 +63,12 @@ public class RBTreeTest {
 		tree.insert(3);
 		tree.insert(4);
 		
-		assertEquals("<Tree [ 1 x [ 2 x [ 3 x [ 4 x x ] ] ] ]>", tree.toString());
+		assertEquals("<Tree [ 2b [ 1b x x ] [ 3b x [ 4r x x ] ] ]>", tree.toString());
 	}
 	
 	@Test public void insertTest2() {
 		RBTree tree = createSomeTestTree1();
-		assertEquals("<Tree [ 1 x [ 12 [ 2 x x ] [ 13 x x ] ] ]>", tree.toString());
+		assertEquals("<Tree [ 12b [ 1b x [ 2r x x ] ] [ 13b x x ] ]>", tree.toString());
 	}
 	
 	@Test public void insertTest3() {
@@ -78,14 +78,14 @@ public class RBTreeTest {
 	
 	@Test public void rotateLeftTest1() {
 		RBTree tree = createSomeTestTree1();
-		tree.leftRotate(tree.getRoot().getRightChild());
-		assertEquals("<Tree [ 1 x [ 13 [ 12 [ 2 x x ] x ] x ] ]>", tree.toString());
+		tree.leftRotate(tree.getRoot());
+		assertEquals("<Tree [ 13b [ 12b [ 1b x [ 2r x x ] ] x ] x ]>", tree.toString());
 	}
 		
 	@Test public void rotateRightTest1() {
 		RBTree tree = createSomeTestTree1();
-		tree.rightRotate(tree.getRoot().getRightChild());
-		assertEquals("<Tree [ 1 x [ 2 x [ 12 x [ 13 x x ] ] ] ]>", tree.toString());
+		tree.rightRotate(tree.getRoot());
+		assertEquals("<Tree [ 1b x [ 12b [ 2r x x ] [ 13b x x ] ] ]>", tree.toString());
 	}
 	
 	@Test public void deleteTest1() {
@@ -98,9 +98,20 @@ public class RBTreeTest {
 	@Test public void deleteTest2() {
 		RBTree tree = createSomeTestTree1();
 		tree.delete(13);
+		System.out.println(tree);
 		assertEquals(false, tree.contains(13));
 		assertEquals(3, tree.size());
 		assertEquals(12, tree.max());
+		assertEquals(true, tree.isValid());
+	}
+
+	@Test public void deleteTest3() {
+		RBTree tree = createSomeTestTree1();
+		tree.delete(12);
+		assertEquals(false, tree.contains(12));
+		assertEquals(3, tree.size());
+		assertEquals(13, tree.max());
+		assertEquals(true, tree.isValid());
 	}
 	
 	@Test public void minTest1() {
@@ -148,7 +159,61 @@ public class RBTreeTest {
 		assertEquals(5, tree.size());
 	}
 	
-	//TODO isValidTest()
-	//TODO maxDepthTest()
-	//TODO minLeafDepthTest()
+	@Test public void maxDepthTest1() {
+		RBTree tree = new RBTree();
+		tree.insert(6);
+		assertEquals(0, tree.maxDepth());
+	}
+	
+	@Test public void maxDepthTest2() {
+		RBTree tree = new RBTree();
+		tree.insert(6);
+		tree.insert(3);
+		tree.insert(5);
+		tree.insert(1);
+		assertEquals(2, tree.maxDepth());
+		tree.insert(7);
+		assertEquals(2, tree.maxDepth());
+	}
+	
+	@Test public void maxDepthTest3() {
+		RBTree tree = createSomeTestTree1();
+		assertEquals(2, tree.maxDepth());
+	}
+	
+	@Test public void minLeafDepthTest1() {
+		RBTree tree = createSomeTestTree1();
+		assertEquals(1, tree.minLeafDepth());
+		tree.insert(0);
+		assertEquals(1, tree.minLeafDepth());
+	}
+
+	@Test public void minLeafDepthTest2() {
+		RBTree tree = new RBTree();
+		assertEquals(-1, tree.minLeafDepth());
+		tree.insert(1);
+		assertEquals(0, tree.minLeafDepth());
+		tree.insert(2);
+		assertEquals(1, tree.minLeafDepth());
+	}
+	
+	@Test public void isValidTest1() {
+		RBTree tree = createSomeTestTree1();
+		assertEquals(true, tree.isValid());
+	}
+	
+	@Test public void isValidTest2() {
+		RBTree tree = createSomeTestTree1();
+		tree.getRoot().getRightChild().setRed();
+		assertEquals(false, tree.isBlackValid());
+		assertEquals(false, tree.isValid());
+	}
+
+	@Test public void isValidTest3() {
+		RBTree tree = createSomeTestTree1();
+		tree.getRoot().getLeftChild().setRed();
+		assertEquals(false, tree.isBlackValid());
+		assertEquals(false, tree.isRedValid());
+		assertEquals(false, tree.isValid());
+	}
 }

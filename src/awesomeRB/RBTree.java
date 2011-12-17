@@ -18,6 +18,14 @@ public class RBTree {
 	 * Pointer to root node
 	 */
 	private RBNode root;
+	
+	//TODO document
+	private int size;
+	
+	public RBTree() {
+		this.root = null;
+		this.size = 0;
+	}
 
 	/**
 	 * Returns pointer to root node
@@ -72,7 +80,6 @@ public class RBTree {
 	 * postcondition: contains(i) == true (that is, i is in the list)
 	 */
 	public void insert(int i) {
-
 		RBNode newNode = new RBNode(i);
 
 		if (empty()) {
@@ -80,29 +87,24 @@ public class RBTree {
 		} else {
 			redBlackInsert(newNode);
 		}
+		this.size++;
 	}
 
 	/**
 	 * Inserts a node to a Red-Black tree in a valid way.
 	 * Based on the RB-Insert algorithm.
 	 */
-	public void redBlackInsert(RBNode newNode) {
+	private void redBlackInsert(RBNode newNode) {
 		RBNode y;
-
+		
 		root.insert(newNode);
 		newNode.setRed();
 
 		while (newNode != root && newNode.getParent().isRed()) {
-			
-			if (newNode.getParent() == root) { // color root in black
-				newNode.getParent().setBlack();
-				newNode = newNode.getParent();
-			} else if (newNode.getGrandParent().hasLeftChild() && 
-					newNode.getParent() == newNode.getGrandParent().getLeftChild()) {
-				
-				y = newNode.getGrandParent().getLeftChild();
+			if (newNode.getParent() == newNode.getGrandParent().getLeftChild()) {
+				y = newNode.getGrandParent().getRightChild();
 
-				if (y.isRed()) {
+				if (y != null && y.isRed()) { //TODO
 					newNode.getParent().setBlack();
 					y.setBlack();
 					newNode.getGrandParent().setRed();
@@ -120,9 +122,9 @@ public class RBTree {
 					}
 				}
 			} else {
-				y = newNode.getGrandParent().getRightChild();
+				y = newNode.getGrandParent().getLeftChild();
 
-				if (y.isRed()) {
+				if (y != null && y.isRed()) { //TODO
 					newNode.getParent().setBlack();
 					y.setBlack();
 					newNode.getGrandParent().setRed();
@@ -142,6 +144,8 @@ public class RBTree {
 			}
 
 		}
+		
+		getRoot().setBlack();
 	}
 
 	/**
@@ -154,7 +158,133 @@ public class RBTree {
 	 * postcondition: contains(i) == false (that is, i is in the list)
 	 */
 	public void delete(int i) {
-		return; // to be replaced by student code
+		RBNode z = getRoot().search(i);
+		
+		if (z == null) { // i was not found
+			return;
+		} else {
+			RBNode x, y;
+			
+			if (!z.hasLeftChild() || !z.hasRightChild()) {
+				y = z;
+			} else {
+				y = successor(z);
+			}
+			
+			if (y.hasLeftChild()) {
+				x = y.getLeftChild();
+			} else {
+				x = y.getRightChild();
+			}
+			
+			if (x != null) { //TODO
+				x.setParent(y.getParent());
+			}
+			if (y.getParent() == null) {
+				setRoot(x);
+			} else if (y == y.getParent().getLeftChild()) {
+				y.getParent().setLeftChild(x);
+			} else {
+				y.getParent().setRightChild(x);
+			}
+			
+			if (y != z) {
+				z.setKey(y.getKey());
+			}
+			
+			if (y.isBlack()) {
+				deleteFixup(x);
+			}
+			
+			this.size--;	
+		}
+	}
+	
+	//TODO
+	private void deleteFixup(RBNode x) {
+		RBNode w;
+		
+		while (getRoot() != x && x.isBlack()) {
+			if (x == x.getParent().getLeftChild()) {
+				w = x.getParent().getRightChild();
+				
+				// Case 1
+				if (w.isRed()) {
+					w.setBlack();
+					x.getParent().setRed();
+					leftRotate(x.getParent());
+					w = x.getParent().getRightChild();
+				}
+				
+				// Case 2
+				if (w.getLeftChild().isBlack() && w.getRightChild().isBlack()) {
+					w.setRed();
+					x = x.getParent();
+				}
+				
+				 // Case 3
+				else if (w.getRightChild().isBlack()) {
+					w.getLeftChild().setBlack();
+					w.setRed();
+					rightRotate(w);
+					w = x.getParent().getRightChild();
+				}
+				
+				// Case 4
+				w.setBlack(x.getParent().isBlack());
+				x.getParent().setBlack();
+				w.getRightChild().setBlack();
+				leftRotate(x.getParent());
+				x = getRoot();
+			} else {
+				w = x.getParent().getLeftChild();
+				
+				// Case 1
+				if (w.isRed()) {
+					w.setBlack();
+					x.getParent().setRed();
+					rightRotate(x.getParent());
+					w = x.getParent().getLeftChild();
+				}
+				
+				// Case 2
+				if (w.getRightChild().isBlack() && w.getLeftChild().isBlack()) {
+					w.setRed();
+					x = x.getParent();
+				}
+				
+				 // Case 3
+				else if (w.getLeftChild().isBlack()) {
+					w.getRightChild().setBlack();
+					w.setRed();
+					leftRotate(w);
+					w = x.getParent().getLeftChild();
+				}
+				
+				// Case 4
+				w.setBlack(x.getParent().isBlack());
+				x.getParent().setBlack();
+				w.getLeftChild().setBlack();
+				rightRotate(x.getParent());
+				x = getRoot();
+			}
+		}
+		
+		x.setBlack();
+	}
+	
+	//TODO doc
+	private RBNode successor(RBNode x) {
+		if (x.hasRightChild()) {
+			return x.getRightChild().minNode();
+		} else {
+			RBNode y = x.getParent();
+			while (y != null && x == y.getRightChild()) { //TODO
+				x = y;
+				y = y.getParent();
+			}
+			return y;
+		}
 	}
 
 	/**
@@ -170,7 +300,7 @@ public class RBTree {
 		if (empty()) {
 			return -1;
 		} else {
-			return getRoot().min();
+			return getRoot().minNode().getKey();
 		}
 	}
 
@@ -187,7 +317,7 @@ public class RBTree {
 		if (empty()) {
 			return -1;
 		} else {
-			return getRoot().max();
+			return getRoot().maxNode().getKey();
 		}
 	}
 
@@ -217,9 +347,36 @@ public class RBTree {
 	 *   
 	 */
 	public boolean isValid() {
-		return false; // should be replaced by student code
+		return isBlackValid() && isRedValid();
 	}
 
+
+	//TODO doc
+	public boolean isRedValid() {
+		if (empty()) {
+			return true; 
+		} else {
+			return getRoot().isRedValid();
+		}
+	}
+
+	//TODO doc
+	public boolean isBlackValid() {
+		if (empty()) {
+			return true; 
+		} else {
+			return getRoot().isBlackValid();
+		}
+	}
+	
+	//TODO doc
+	private int blackDepth() {
+		if (empty()) {
+			return 0;
+		} else {
+			return getRoot().blackDepth();
+		}
+	}
 
 	/**
 	 * public int maxDepth()
@@ -249,7 +406,7 @@ public class RBTree {
 	 */
 	public int minLeafDepth() {
 		if (empty()) {
-			return -1; //TODO should be -1
+			return -1;
 		} else {
 			return getRoot().minLeafDepth();
 		}
@@ -264,11 +421,7 @@ public class RBTree {
 	 * postcondition: none
 	 */
 	public int size() {
-		if (empty()) {
-			return 0;
-		} else {
-			return getRoot().size();
-		}
+		return size;
 	}
 
 	//TODO document
@@ -394,6 +547,10 @@ public class RBTree {
 		public void setBlack() {
 			this.isBlack = true;
 		}
+		
+		public void setBlack(boolean isBlack) {
+			this.isBlack = isBlack;
+		}
 
 		public boolean isRed() {
 			return !isBlack();
@@ -438,18 +595,22 @@ public class RBTree {
 		public boolean hasRightChild() {
 			return rightChild != null;
 		}
-
-		public boolean contains(int i) {
+		
+		public RBNode search(int i) {
 			if (getKey() == i) {
-				return true;
+				return this;
 			} else {
 				if (i < getKey() && hasLeftChild()) {
-					return getLeftChild().contains(i);
+					return getLeftChild().search(i);
 				} else if (hasRightChild()) {
-					return getRightChild().contains(i);
+					return getRightChild().search(i);
 				}
 			}
-			return false;
+			return null;
+		}
+
+		public boolean contains(int i) {
+			return search(i) != null;
 		}
 
 		public void insert(RBNode newNode) {
@@ -468,33 +629,20 @@ public class RBTree {
 			}
 		}
 		
-		public int min() {
+		public RBNode minNode() {
 			if (hasLeftChild()) {
-				return getLeftChild().min();
+				return getLeftChild().minNode();
 			} else {
-				return getKey();
+				return this;
 			}
 		}
 		
-		public int max() {
+		public RBNode maxNode() {
 			if (hasRightChild()) {
-				return getRightChild().max();
+				return getRightChild().maxNode();
 			} else {
-				return getKey();
+				return this;
 			}
-		}
-		
-		public int size() {
-			int size = 1;
-			
-			if (hasLeftChild()) {
-				size+= getLeftChild().size();
-			}
-			if (hasRightChild()) {
-				size+= getRightChild().size();
-			}
-			
-			return size;
 		}
 		
 		public int fillIntArray(int[] arr, int loc) {
@@ -515,39 +663,86 @@ public class RBTree {
 			String leftString  = hasLeftChild() ? getLeftChild().toString() : "x";
 			String rightString = hasRightChild() ? getRightChild().toString() : "x";
 			
-			return String.format("[ %d %s %s ]", getKey(), leftString, rightString);
+			return String.format("[ %d%s %s %s ]", getKey(), isBlack() ? "b" : "r", leftString, rightString);
 		}
 		
 		public int maxDepth() {
-			int downMax = 0;
-			
-			if (hasLeftChild() && hasRightChild()) {
-				downMax+= Math.max(getLeftChild().maxDepth(), 
-								getRightChild().maxDepth());
-			} else if (hasLeftChild()) {
-				downMax+= getLeftChild().maxDepth();
-			} else if (hasRightChild()) {
-				downMax+= getRightChild().maxDepth();
+			if (isLeaf()) {
+				return 0;
+			} else {
+				if (hasLeftChild() && hasRightChild()) {
+					return 1 + Math.max(getLeftChild().maxDepth(),
+							getRightChild().maxDepth());
+				} else if (hasLeftChild()) {
+					return 1 + getLeftChild().maxDepth();
+				} else { // hasRightChild()
+					return 1 + getRightChild().maxDepth();
+				}
 			}
-
-			return 1 + downMax;
 		}
 		
 		public int minLeafDepth() {
-			int downMin = 0;
-			
-			if (hasLeftChild() && hasRightChild()) {
-				downMin+= Math.min(getLeftChild().maxDepth(), 
-									getRightChild().maxDepth());
-			} else if (hasLeftChild()) {
-				downMin+= getLeftChild().maxDepth();
-			} else if (hasRightChild()) {
-				downMin+=  getRightChild().maxDepth();
+			if (isLeaf()) {
+				return 0;
+			} else {
+				if (hasLeftChild() && hasRightChild()) {
+					return 1 + Math.min(getLeftChild().minLeafDepth(),
+							getRightChild().minLeafDepth());
+				} else if (hasLeftChild()) {
+					return 1 + getLeftChild().minLeafDepth();
+				} else { // hasRightchild()
+					return 1 + getRightChild().minLeafDepth();
+				}
 			}
-			
-			return 1 + downMin;
 		}
 
+		public boolean isRedValid() {
+			if (isLeaf()) {
+				return true;
+			} else {
+				if (isBlack()) {
+					if (hasLeftChild() && hasRightChild()) {
+						return getLeftChild().isRedValid() && getRightChild().isRedValid();
+					} else if (hasLeftChild()) {
+						return getLeftChild().isRedValid();
+					} else { // hasRightChild()
+						return getRightChild().isRedValid();
+					}
+				} else { // isRed()
+					if (hasLeftChild() && hasRightChild()) {
+						return getLeftChild().isBlack() && getLeftChild().isRedValid() &&
+							getRightChild().isBlack() && getRightChild().isRedValid();
+					} else if (hasLeftChild()) {
+						return getLeftChild().isBlack() && getLeftChild().isRedValid();
+					} else { // hasRightChild()
+						return getRightChild().isBlack() && getRightChild().isRedValid();
+					}
+				}
+			}
+		}
+		
+		private int blackDepth() {
+			int me = isBlack() ? 1 : 0;
+			if (hasLeftChild()) {
+				return me + getLeftChild().blackDepth();
+			} else {
+				return me;
+			}
+		}
+		
+		public boolean isBlackValid() {
+			if (isLeaf()) {
+				return true;
+			} else {
+				if (hasRightChild() && hasLeftChild()) {
+					return getRightChild().blackDepth() == getLeftChild().blackDepth();
+				} else if (hasLeftChild()) {
+					return getLeftChild().blackDepth() == 0;
+				} else { // hasRightChild()
+					return getRightChild().blackDepth() == 0;
+				}
+			}
+		}
 	}
 
 	/**
