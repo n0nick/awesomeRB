@@ -596,7 +596,10 @@ public class RBTree {
 		}
 		
 		public RBNode search(int i) {
-			if (getKey() == i) {
+			if (isNil()) {
+				return null;
+			}
+			else if (getKey() == i) {
 				return this;
 			} else {
 				if (i < getKey() && hasLeftChild()) {

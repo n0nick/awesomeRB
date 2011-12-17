@@ -177,6 +177,14 @@ public class RBTreeTest {
 		assertEquals(true, tree.empty());
 	}
 	
+	@Test public void deleteTest5() {
+		RBTree tree = new RBTree();
+		tree.delete(1);
+		
+		assertEquals(true, tree.isValid());
+		assertEquals(true, tree.empty());
+	}
+	
 	@Test public void minTest1() {
 		RBTree tree = createSomeTestTree1();
 		assertEquals(1, tree.min());
