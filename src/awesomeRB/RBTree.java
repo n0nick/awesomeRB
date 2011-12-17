@@ -97,55 +97,56 @@ public class RBTree {
 	private void redBlackInsert(RBNode newNode) {
 		RBNode y;
 		
-		root.insert(newNode);
-		newNode.setRed();
-
-		while (newNode != root && newNode.getParent().isRed()) {
-			if (newNode.getParent() == newNode.getGrandParent().getLeftChild()) {
-				y = newNode.getGrandParent().getRightChild();
-
-				if (!y.isNil() && y.isRed()) {
-					newNode.getParent().setBlack();
-					y.setBlack();
-					newNode.getGrandParent().setRed();
-					newNode = newNode.getGrandParent();
-				} else if (newNode == newNode.getParent().getRightChild()) {
-					newNode = newNode.getParent();
-					leftRotate(newNode);
-				}
-
-				if (newNode.hasParent()) {
-					newNode.getParent().setBlack();
-					if (newNode.hasGrandParent()) {
+		if (getRoot().insert(newNode)) {
+			newNode.setRed();
+	
+			while (newNode != getRoot() && newNode.getParent().isRed()) {
+				if (newNode.getParent() == newNode.getGrandParent().getLeftChild()) {
+					y = newNode.getGrandParent().getRightChild();
+	
+					if (!y.isNil() && y.isRed()) {
+						newNode.getParent().setBlack();
+						y.setBlack();
 						newNode.getGrandParent().setRed();
-						rightRotate(newNode.getGrandParent());
+						newNode = newNode.getGrandParent();
+					} else if (newNode == newNode.getParent().getRightChild()) {
+						newNode = newNode.getParent();
+						leftRotate(newNode);
+					}
+	
+					if (newNode.hasParent()) {
+						newNode.getParent().setBlack();
+						if (newNode.hasGrandParent()) {
+							newNode.getGrandParent().setRed();
+							rightRotate(newNode.getGrandParent());
+						}
+					}
+				} else {
+					y = newNode.getGrandParent().getLeftChild();
+	
+					if (!y.isNil() && y.isRed()) {
+						newNode.getParent().setBlack();
+						y.setBlack();
+						newNode.getGrandParent().setRed();
+						newNode = newNode.getGrandParent();
+					} else if (newNode == newNode.getParent().getLeftChild()) {
+						newNode = newNode.getParent();
+						rightRotate(newNode);
+					}
+	
+					if (newNode.hasParent()) {
+						newNode.getParent().setBlack();
+						if (newNode.hasGrandParent()) {
+							newNode.getGrandParent().setRed();
+							leftRotate(newNode.getGrandParent());
+						}
 					}
 				}
-			} else {
-				y = newNode.getGrandParent().getLeftChild();
-
-				if (!y.isNil() && y.isRed()) {
-					newNode.getParent().setBlack();
-					y.setBlack();
-					newNode.getGrandParent().setRed();
-					newNode = newNode.getGrandParent();
-				} else if (newNode == newNode.getParent().getLeftChild()) {
-					newNode = newNode.getParent();
-					rightRotate(newNode);
-				}
-
-				if (newNode.hasParent()) {
-					newNode.getParent().setBlack();
-					if (newNode.hasGrandParent()) {
-						newNode.getGrandParent().setRed();
-						leftRotate(newNode.getGrandParent());
-					}
-				}
+	
 			}
-
+			
+			getRoot().setBlack();
 		}
-		
-		getRoot().setBlack();
 	}
 
 	/**
@@ -611,19 +612,23 @@ public class RBTree {
 			return search(i) != null;
 		}
 
-		public void insert(RBNode newNode) {
+		public boolean insert(RBNode newNode) {
 			if (newNode.getKey() < getKey()) {
 				if (hasLeftChild()) {
-					getLeftChild().insert(newNode);
+					return getLeftChild().insert(newNode);
 				} else {
 					setLeftChild(newNode);
+					return true;
 				}
 			} else if (newNode.getKey() > getKey()) {
 				if (hasRightChild()) {
-					getRightChild().insert(newNode);
+					return getRightChild().insert(newNode);
 				} else {
 					setRightChild(newNode);
+					return true;
 				}
+			} else { // key already exists, skip
+				return false;
 			}
 		}
 		
