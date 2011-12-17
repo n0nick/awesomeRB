@@ -98,7 +98,6 @@ public class RBTreeTest {
 	@Test public void deleteTest2() {
 		RBTree tree = createSomeTestTree1();
 		tree.delete(13);
-		System.out.println(tree);
 		assertEquals(false, tree.contains(13));
 		assertEquals(3, tree.size());
 		assertEquals(12, tree.max());
@@ -112,6 +111,59 @@ public class RBTreeTest {
 		assertEquals(3, tree.size());
 		assertEquals(13, tree.max());
 		assertEquals(true, tree.isValid());
+	}
+	
+	@Test public void deleteTest4() {
+		RBTree tree = createSomeTestTree2();
+		
+		tree.delete(8);
+		assertEquals(10, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(16);
+		assertEquals(9, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(7);
+		assertEquals(8, tree.size());
+		assertEquals(true, tree.isValid());
+		
+		tree.delete(4);
+		assertEquals(7, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(9);
+		assertEquals(6, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(5);
+		assertEquals(5, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(19);
+		assertEquals(4, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(13);
+		assertEquals(3, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(6);
+		assertEquals(2, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(1);
+		assertEquals(1, tree.size());
+		assertEquals(true, tree.isValid());
+
+		tree.delete(5);
+		assertEquals(1, tree.size());
+		assertEquals(true, tree.isValid());
+		
+		tree.delete(15);
+		assertEquals(0, tree.size());
+		assertEquals(true, tree.isValid());
+		assertEquals(true, tree.empty());
 	}
 	
 	@Test public void minTest1() {
