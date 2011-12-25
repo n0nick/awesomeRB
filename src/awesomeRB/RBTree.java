@@ -12,7 +12,8 @@ package awesomeRB;
  * Robert L. Rivest. Introduction to Algorithms.
  * Cambridge, MA: MIT, 2001. Print.
  * 
- * @imp_inv getRoot() != null
+ * Invariant: getRoot() != null
+ * Invariant: isValid()
  */
 public class RBTree {
 	
