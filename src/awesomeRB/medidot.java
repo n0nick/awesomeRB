@@ -36,6 +36,7 @@ public class medidot {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
 		for (int count=10000; count<=100000; count+=10000) {
 			
 			int[] numbers = generateRandomSet(count);
@@ -48,8 +49,12 @@ public class medidot {
 			System.out.println("Results for size " + count);
 			System.out.println("size:" + tree.size());
 			System.out.println("max depth: " + tree.maxDepth());
-			System.out.println("max depth / min leaf depth: " + (tree.maxDepth()/tree.minLeafDepth()));
+			System.out.println("min depth: " + tree.minLeafDepth());
+			System.out.println("max depth / min leaf depth: " + (float)((float)tree.maxDepth()/(float)tree.minLeafDepth()));
+			System.out.println();
 		}
 	}
+	
+	
 
 }
