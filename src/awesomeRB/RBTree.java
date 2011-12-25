@@ -1,7 +1,6 @@
 package awesomeRB;
 
 /**
- * 
  * RBTree
  * 
  * An implementation of a Red Black Tree with
@@ -14,6 +13,9 @@ package awesomeRB;
  * 
  * Invariant: getRoot() != null
  * Invariant: isValid()
+ * 
+ * @author Amir Moualem, amirmoua@mail.tau.ac.il, ID ?????????
+ * @author Sagie Maoz, sagiemao@mail.tau.ac.il, ID 021526025
  */
 public class RBTree {
 	
