@@ -87,6 +87,7 @@ public class RBTreeTest {
 		tree.insert(15);
 	}
 	
+	/*
 	@Test public void rotateLeftTest1() {
 		RBTree tree = createSomeTestTree1();
 		tree.leftRotate(tree.getRoot());
@@ -98,6 +99,7 @@ public class RBTreeTest {
 		tree.rightRotate(tree.getRoot());
 		assertEquals("<Tree [ 1b x [ 12b [ 2r x x ] [ 13b x x ] ] ]>", tree.toString());
 	}
+	*/
 	
 	@Test public void deleteTest1() {
 		RBTree tree = new RBTree();
@@ -276,15 +278,30 @@ public class RBTreeTest {
 	@Test public void isValidTest2() {
 		RBTree tree = createSomeTestTree1();
 		tree.getRoot().getRightChild().setRed();
-		assertEquals(false, tree.isBlackValid());
+		assertEquals(false, tree.getRoot().isBlackValid());
 		assertEquals(false, tree.isValid());
 	}
 
 	@Test public void isValidTest3() {
 		RBTree tree = createSomeTestTree1();
 		tree.getRoot().getLeftChild().setRed();
-		assertEquals(false, tree.isBlackValid());
-		assertEquals(false, tree.isRedValid());
+		assertEquals(false, tree.getRoot().isBlackValid());
+		assertEquals(false, tree.getRoot().isRedValid());
 		assertEquals(false, tree.isValid());
+	}
+	
+	@Test public void isValidTest4() {
+		RBTree tree = createSomeTestTree1();
+		tree.getRoot().setKey(50);
+		assertEquals(false, tree.getRoot().isBSTValid());
+		assertEquals(false, tree.isValid());
+	}
+	
+	@Test public void deleteMax() {
+		RBTree tree = new RBTree();
+		tree.insert(8);
+		tree.insert(3);
+		tree.delete(8);
+		assertEquals("<Tree [ 3b x x ]>", tree.toString());
 	}
 }
