@@ -122,18 +122,21 @@ public class RBTree {
 						y.setBlack();
 						newNode.getGrandParent().setRed();
 						newNode = newNode.getGrandParent();
-					} else if (newNode == newNode.getParent().getRightChild()) {
-						newNode = newNode.getParent();
-						leftRotate(newNode);
-					}
-	
-					if (newNode.hasParent()) {
-						newNode.getParent().setBlack();
-						if (newNode.hasGrandParent()) {
-							newNode.getGrandParent().setRed();
-							rightRotate(newNode.getGrandParent());
+					} else {
+						if (newNode == newNode.getParent().getRightChild()) {
+							newNode = newNode.getParent();
+							leftRotate(newNode);
+						}
+					
+						if (newNode.hasParent()) {
+							newNode.getParent().setBlack();
+							if (newNode.hasGrandParent()) {
+								newNode.getGrandParent().setRed();
+								rightRotate(newNode.getGrandParent());
+							}
 						}
 					}
+					
 				} else {
 					y = newNode.getGrandParent().getLeftChild();
 	
@@ -142,16 +145,18 @@ public class RBTree {
 						y.setBlack();
 						newNode.getGrandParent().setRed();
 						newNode = newNode.getGrandParent();
-					} else if (newNode == newNode.getParent().getLeftChild()) {
-						newNode = newNode.getParent();
-						rightRotate(newNode);
-					}
-	
-					if (newNode.hasParent()) {
-						newNode.getParent().setBlack();
-						if (newNode.hasGrandParent()) {
-							newNode.getGrandParent().setRed();
-							leftRotate(newNode.getGrandParent());
+					} else {
+						if (newNode == newNode.getParent().getLeftChild()) {
+							newNode = newNode.getParent();
+							rightRotate(newNode);
+						}
+					
+						if (newNode.hasParent()) {
+							newNode.getParent().setBlack();
+							if (newNode.hasGrandParent()) {
+								newNode.getGrandParent().setRed();
+								leftRotate(newNode.getGrandParent());
+							}
 						}
 					}
 				}
@@ -1011,4 +1016,3 @@ public class RBTree {
 	 */
 
 }
-
