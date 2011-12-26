@@ -107,7 +107,7 @@ public class RBTree {
 	 * Inserts a node to a Red-Black tree in a valid way.
 	 * Based on the RB-Insert algorithm.
 	 * 
-	 * @param RBNode newNode New node to insert
+	 * @param newNode New node to insert
 	 */
 	private void redBlackInsert(RBNode newNode) {
 		RBNode y;
@@ -310,7 +310,7 @@ public class RBTree {
 	 * precondition: x != null
 	 * precondition: x.hasLeftChild() && x.hasRightChild()
 	 * 
-	 * @param RBNode x Node to find the successor of
+	 * @param x Node to find the successor of
 	 */
 	private RBNode successor(RBNode x) {
 		if (x.hasRightChild()) {
@@ -748,7 +748,7 @@ public class RBTree {
 
 		/**
 		 * Returns true if node has a left child,
-		 * i.e. its left child is a non-nli node.
+		 * i.e. its left child is a non-nil node.
 		 * 
 		 * @return True iff node has a left child
 		 */
@@ -758,7 +758,7 @@ public class RBTree {
 
 		/**
 		 * Returns true if node has a right child,
-		 * i.e. its right child is a non-nli node.
+		 * i.e. its right child is a non-nil node.
 		 * 
 		 * @return True iff node has a right child
 		 */
