@@ -87,6 +87,41 @@ public class RBTreeTest {
 		tree.insert(15);
 	}
 	
+	@Test public void insertDeleteTest5() {
+		RBTree tree = new RBTree();
+		
+		assertEquals(true, tree.empty());
+		assertEquals(-1, tree.min());
+		assertEquals(-1, tree.max());
+		
+		tree.insert(1);
+		assertEquals(1, tree.size());
+		assertEquals(1, tree.min());
+		assertEquals(1, tree.max());
+		
+		tree.delete(1);
+		assertEquals(true, tree.empty());
+		assertEquals(-1, tree.min());
+		assertEquals(-1, tree.max());
+		
+		tree.insert(2);
+		assertEquals(1, tree.size());
+		assertEquals(2, tree.min());
+		assertEquals(2, tree.max());
+		
+		tree.insert(1);
+		assertEquals(2, tree.size());
+		assertEquals(1, tree.min());
+		assertEquals(2, tree.max());
+		
+		for (int i=3; i<=15; i++) {
+			tree.insert(i);
+		}
+		assertEquals(15, tree.size());
+		assertEquals(1, tree.min());
+		assertEquals(15, tree.max());
+	}
+	
 	/*
 	@Test public void rotateLeftTest1() {
 		RBTree tree = createSomeTestTree1();
@@ -270,6 +305,28 @@ public class RBTreeTest {
 		assertEquals(1, tree.minLeafDepth());
 	}
 	
+	@Test public void minMaxDepthTest() {
+		RBTree tree = new RBTree();
+		assertEquals(-1, tree.minLeafDepth());
+		assertEquals(-1, tree.maxDepth());
+		
+		tree.insert(1);
+		assertEquals(0, tree.minLeafDepth());
+		assertEquals(0, tree.maxDepth());
+		
+		tree.insert(2);
+		assertEquals(1, tree.minLeafDepth());
+		assertEquals(1, tree.maxDepth());
+		
+		tree.insert(3);
+		assertEquals(1, tree.minLeafDepth());
+		assertEquals(1, tree.maxDepth());
+
+		tree.insert(4);
+		assertEquals(1, tree.minLeafDepth());
+		assertEquals(2, tree.maxDepth());
+	}
+	
 	@Test public void isValidTest1() {
 		RBTree tree = createSomeTestTree1();
 		assertEquals(true, tree.isValid());
@@ -277,23 +334,23 @@ public class RBTreeTest {
 	
 	@Test public void isValidTest2() {
 		RBTree tree = createSomeTestTree1();
-		tree.getRoot().getRightChild().setRed();
-		assertEquals(false, tree.getRoot().isBlackValid());
+//		tree.getRoot().getRightChild().setRed();
+//		assertEquals(false, tree.getRoot().isBlackValid());
 		assertEquals(false, tree.isValid());
 	}
 
 	@Test public void isValidTest3() {
 		RBTree tree = createSomeTestTree1();
-		tree.getRoot().getLeftChild().setRed();
-		assertEquals(false, tree.getRoot().isBlackValid());
-		assertEquals(false, tree.getRoot().isRedValid());
+//		tree.getRoot().getLeftChild().setRed();
+//		assertEquals(false, tree.getRoot().isBlackValid());
+//		assertEquals(false, tree.getRoot().isRedValid());
 		assertEquals(false, tree.isValid());
 	}
 	
 	@Test public void isValidTest4() {
 		RBTree tree = createSomeTestTree1();
-		tree.getRoot().setKey(50);
-		assertEquals(false, tree.getRoot().isBSTValid());
+//		tree.getRoot().setKey(50);
+//		assertEquals(false, tree.getRoot().isBSTValid());
 		assertEquals(false, tree.isValid());
 	}
 	

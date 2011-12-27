@@ -23,6 +23,11 @@ public class RBTree {
 	 * Constant marking a key as that of an empty leaf
 	 */
 	static final int NilValue = -1;
+
+	/**
+	 * Constant returned when requesting a min / max value when tree is empty
+	 */
+	static final int EmptyMinMaxValue = -1;
 	
 	/**
 	 * Pointer to root node
@@ -35,17 +40,29 @@ public class RBTree {
 	private int size;
 	
 	/**
+	 * Current smallest key in the tree.
+	 */
+	private int min;
+	
+	/**
+	 * Current greatest key in the tree.
+	 */
+	private int max;
+	
+	/**
 	 * Creates a new, empty instance
 	 */
 	public RBTree() {
 		this.root = new RBNode(RBTree.NilValue);
 		this.size = 0;
+		this.min = EmptyMinMaxValue;
+		this.max = EmptyMinMaxValue;
 	}
 
 	/**
 	 * Returns pointer to root node
 	 */
-	public RBNode getRoot() {
+	private RBNode getRoot() {
 		return this.root;
 	}
 
@@ -96,10 +113,23 @@ public class RBTree {
 		RBNode newNode = new RBNode(i);
 
 		if (empty()) {
+			// first node in tree
 			setRoot(newNode);
+			this.min = i;
+			this.max = i;
 		} else {
 			redBlackInsert(newNode);
+			
+			// maintain min and max properties
+			if (this.min > i) {
+				this.min = i;
+			}
+			if (this.max < i) {
+				this.max = i;
+			}
 		}
+		
+		// maintain size property
 		this.size++;
 	}
 
@@ -209,6 +239,7 @@ public class RBTree {
 				y.getParent().setRightChild(x);
 			}
 			
+			// switch values of y and z
 			if (y != z) {
 				z.setKey(y.getKey());
 			}
@@ -217,7 +248,21 @@ public class RBTree {
 				deleteFixup(x);
 			}
 			
-			this.size--;	
+			// maintain size property
+			this.size--;
+			
+			// maintain min and max properties
+			if (this.size == 0) {
+				this.min = EmptyMinMaxValue;
+				this.max = EmptyMinMaxValue;
+			} else {
+				if (this.min == i) {
+					this.min = getRoot().minValue();
+				}
+				if (this.max == i) {
+					this.max = getRoot().maxValue();
+				}
+			}
 		}
 	}
 	
@@ -329,32 +374,24 @@ public class RBTree {
 	 * Returns the smallest key in the tree. If the tree
 	 * is empty, returns -1;
 	 * 
-	 * Time complexity: O(logn)
+	 * Time complexity: O(1)
 	 * 
 	 * @return Smallest key in tree, -1 if tree is empty
 	 */
 	public int min() {
-		if (empty()) {
-			return -1;
-		} else {
-			return getRoot().minNode().getKey();
-		}
+		return this.min;
 	}
 
 	/**
 	 * Returns the largest key in the tree. If the tree
 	 * is empty, returns -1;
 	 * 
-	 * Time complexity: O(logn)
+	 * Time complexity: O(1)
 	 * 
 	 * @return Largest key in tree, -1 if tree is empty
 	 */
 	public int max() {
-		if (empty()) {
-			return -1;
-		} else {
-			return getRoot().maxNode().getKey();
-		}
+		return this.max;
 	}
 
 	/**
@@ -433,6 +470,7 @@ public class RBTree {
 	public int size() {
 		return size;
 	}
+	
 
 	/**
 	 * Returns a string representation of the tree.
@@ -837,6 +875,15 @@ public class RBTree {
 				return this;
 			}
 		}
+				
+		/**
+		 * Returns the key of minimal node (i.e., minimal key in tree). 
+		 * 
+		 * @return Smallest key in the tree.
+		 */
+		private int minValue() {
+			return minNode().getKey();
+		}
 		
 		/**
 		 * Returns a pointer to the node containing the largest key.
@@ -849,6 +896,15 @@ public class RBTree {
 			} else {
 				return this;
 			}
+		}
+		
+		/**
+		 * Returns the key of maximal node (i.e., maximal key in tree). 
+		 * 
+		 * @return Largest key in the tree.
+		 */
+		private int maxValue() {
+			return maxNode().getKey();
 		}
 		
 		/**
@@ -930,7 +986,7 @@ public class RBTree {
 	 	 * 
 	 	 * @return True iff node is a valid BST.
 		 */
-		public boolean isBSTValid() {
+		private boolean isBSTValid() {
 			if (isNil()) {
 				return true;
 			} else {
@@ -951,7 +1007,7 @@ public class RBTree {
 		 * 
 		 * @return True iff node follows the Red rule
 		 */
-		public boolean isRedValid() {
+		private boolean isRedValid() {
 			if (isLeaf()) {
 				return true;
 			} else {
@@ -997,7 +1053,7 @@ public class RBTree {
 		 * 
 		 * @return True iff node follows the Black rule
 		 */
-		public boolean isBlackValid() {
+		private boolean isBlackValid() {
 			if (isLeaf()) {
 				return true;
 			} else {
