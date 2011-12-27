@@ -1,9 +1,8 @@
 package awesomeRB;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-public class medidot {
+public class Survey {
 	
 	private static boolean contains(int[] ar, int x) {
 		for (int y : ar) {
