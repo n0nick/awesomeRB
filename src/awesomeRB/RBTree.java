@@ -456,7 +456,7 @@ public class RBTree {
 	 * 
 	 * @param x	Node to rotate
 	 */
-	public void leftRotate(RBNode x) {
+	private void leftRotate(RBNode x) {
 		RBNode y = x.getRightChild();
 		x.setRightChild(y.getLeftChild());
 
@@ -487,7 +487,7 @@ public class RBTree {
 	 * 
 	 * @param x Node to rotate
 	 */
-	public void rightRotate(RBNode x) {
+	private void rightRotate(RBNode x) {
 		RBNode y = x.getLeftChild();
 		x.setLeftChild(y.getRightChild());
 
